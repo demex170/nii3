@@ -1,0 +1,1945 @@
+```html
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08060a">
+<meta name="description" content="დემე × ნინი — ჩვენი ისტორია">
+<title>დემე × ნინი — ჩვენი ისტორია</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:#08060a;
+    color:#fff;
+    font-family:"Noto Sans Georgian",sans-serif;
+    overflow:hidden;
+}
+
+button{
+    font-family:inherit;
+}
+
+:root{
+    --pink:#ff5d9d;
+    --pink-light:#ff9ac2;
+    --white:#fff;
+    --muted:rgba(255,255,255,.62);
+    --line:rgba(255,255,255,.12);
+}
+
+/* =========================================================
+   OPENING
+========================================================= */
+
+#opening{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    background:#000;
+    overflow:hidden;
+    transition:
+        opacity 1.3s cubic-bezier(.16,1,.3,1),
+        visibility 1.3s;
+}
+
+#opening.hide{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+
+/* =========================================================
+   OPENING VIDEO
+========================================================= */
+
+.opening-video{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
+
+    background:#000;
+}
+
+/*
+   მსუბუქი overlay.
+   თავიდან თითქმის შეუმჩნეველია,
+   რათა ვიდეო მაქსიმალურად სუფთად ჩანდეს.
+*/
+
+.opening-video-overlay{
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,.04),
+            rgba(0,0,0,.18)
+        );
+
+    pointer-events:none;
+
+    transition:
+        background 1.8s ease;
+}
+
+#opening.finished .opening-video-overlay{
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,.22),
+            rgba(0,0,0,.58)
+        );
+}
+
+/* =========================================================
+   CINEMATIC MESSAGE
+========================================================= */
+
+/*
+   ძალიან მნიშვნელოვანია:
+
+   თავიდან:
+   opacity:0
+   visibility:hidden
+
+   ანუ ვიდეოს 3 წამში საერთოდ არ აქვს ტექსტი.
+*/
+
+.cinematic-message{
+    position:absolute;
+    inset:0;
+
+    z-index:5;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:30px;
+
+    opacity:0;
+    visibility:hidden;
+
+    transform:translateY(35px);
+
+    transition:
+        opacity 1.5s cubic-bezier(.16,1,.3,1),
+        transform 1.5s cubic-bezier(.16,1,.3,1),
+        visibility 0s linear 1.5s;
+}
+
+/*
+   ვიდეოს დასრულების შემდეგ ეს კლასი დაემატება.
+*/
+
+.cinematic-message.show{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+
+    transition:
+        opacity 1.5s cubic-bezier(.16,1,.3,1),
+        transform 1.5s cubic-bezier(.16,1,.3,1);
+}
+
+/* =========================================================
+   OPENING TEXT
+========================================================= */
+
+.opening-kicker{
+    font-size:10px;
+    font-weight:400;
+
+    letter-spacing:6px;
+
+    color:rgba(255,255,255,.72);
+
+    margin-bottom:24px;
+
+    opacity:0;
+    transform:translateY(20px);
+
+    transition:
+        opacity 1s ease .15s,
+        transform 1s ease .15s;
+}
+
+.cinematic-message.show .opening-kicker{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.opening-title{
+    font-size:clamp(42px,9vw,100px);
+
+    line-height:1.02;
+
+    font-weight:400;
+
+    letter-spacing:-5px;
+
+    color:#fff;
+
+    text-shadow:
+        0 10px 50px rgba(0,0,0,.4);
+
+    opacity:0;
+    transform:translateY(30px);
+
+    transition:
+        opacity 1.35s cubic-bezier(.16,1,.3,1) .35s,
+        transform 1.35s cubic-bezier(.16,1,.3,1) .35s;
+}
+
+.cinematic-message.show .opening-title{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.opening-title span{
+    color:var(--pink-light);
+}
+
+.opening-subtitle{
+    margin-top:23px;
+
+    color:rgba(255,255,255,.72);
+
+    font-size:14px;
+
+    letter-spacing:3px;
+
+    opacity:0;
+    transform:translateY(20px);
+
+    transition:
+        opacity 1s ease .75s,
+        transform 1s ease .75s;
+}
+
+.cinematic-message.show .opening-subtitle{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================================================
+   OPEN BUTTON
+========================================================= */
+
+.open-btn{
+    margin-top:38px;
+
+    padding:14px 27px;
+
+    border:1px solid rgba(255,255,255,.4);
+
+    border-radius:100px;
+
+    background:rgba(0,0,0,.16);
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:13px;
+
+    opacity:0;
+    transform:translateY(20px);
+
+    transition:
+        opacity 1s ease 1.1s,
+        transform 1s ease 1.1s,
+        background .35s ease,
+        color .35s ease,
+        border-color .35s ease;
+}
+
+.cinematic-message.show .open-btn{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.open-btn:hover{
+    background:#fff;
+    border-color:#fff;
+    color:#111;
+
+    transform:
+        translateY(-2px);
+}
+
+/* =========================================================
+   SKIP / STATUS
+========================================================= */
+
+.opening-status{
+    position:absolute;
+
+    bottom:25px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:10;
+
+    font-size:9px;
+
+    letter-spacing:4px;
+
+    color:rgba(255,255,255,.38);
+
+    white-space:nowrap;
+
+    transition:
+        opacity .6s ease;
+}
+
+#opening.finished .opening-status{
+    opacity:0;
+}
+
+/* =========================================================
+   MUSIC
+========================================================= */
+
+.music-control{
+    position:fixed;
+
+    top:20px;
+    right:20px;
+
+    width:46px;
+    height:46px;
+
+    z-index:9000;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    border:1px solid rgba(255,255,255,.18);
+
+    background:rgba(8,6,10,.82);
+
+    color:#fff;
+
+    cursor:pointer;
+
+    backdrop-filter:none;
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease;
+}
+
+.music-control:hover{
+    transform:scale(1.06);
+    border-color:rgba(255,255,255,.45);
+}
+
+.music-bars{
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:center;
+
+    gap:3px;
+
+    height:16px;
+}
+
+.music-bars span{
+    display:block;
+
+    width:2px;
+
+    background:var(--pink-light);
+
+    transform-origin:bottom;
+
+    animation:
+        musicBars .9s ease-in-out infinite alternate;
+}
+
+.music-bars span:nth-child(1){
+    height:7px;
+}
+
+.music-bars span:nth-child(2){
+    height:13px;
+    animation-delay:.15s;
+}
+
+.music-bars span:nth-child(3){
+    height:10px;
+    animation-delay:.3s;
+}
+
+.music-bars span:nth-child(4){
+    height:15px;
+    animation-delay:.45s;
+}
+
+.music-control.paused .music-bars span{
+    animation-play-state:paused;
+    height:5px;
+}
+
+@keyframes musicBars{
+    from{
+        transform:scaleY(.45);
+    }
+
+    to{
+        transform:scaleY(1);
+    }
+}
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+section{
+    position:relative;
+    overflow:hidden;
+}
+
+.container{
+    width:min(1120px,90%);
+    margin:0 auto;
+}
+
+.reveal{
+    opacity:0;
+
+    transform:translateY(45px);
+
+    transition:
+        opacity 1.1s ease,
+        transform 1.1s cubic-bezier(.16,1,.3,1);
+}
+
+.reveal.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(255,82,150,.14),
+            transparent 36%
+        ),
+        #08060a;
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+}
+
+.eyebrow{
+    margin-bottom:28px;
+
+    font-size:10px;
+
+    letter-spacing:6px;
+
+    color:rgba(255,255,255,.42);
+}
+
+.hero h1{
+    font-size:clamp(60px,12vw,150px);
+
+    line-height:.86;
+
+    font-weight:400;
+
+    letter-spacing:-8px;
+}
+
+.hero h1 span{
+    color:var(--pink-light);
+}
+
+.hero-text{
+    max-width:600px;
+
+    margin:36px auto 0;
+
+    color:var(--muted);
+
+    font-size:15px;
+
+    line-height:2;
+}
+
+.scroll-indicator{
+    position:absolute;
+
+    left:50%;
+    bottom:28px;
+
+    transform:translateX(-50%);
+
+    color:rgba(255,255,255,.36);
+
+    font-size:9px;
+
+    letter-spacing:5px;
+
+    text-align:center;
+}
+
+.scroll-indicator::after{
+    content:"";
+
+    display:block;
+
+    width:1px;
+    height:48px;
+
+    margin:13px auto 0;
+
+    background:rgba(255,255,255,.3);
+
+    animation:
+        scrollLine 1.5s ease-in-out infinite;
+}
+
+@keyframes scrollLine{
+
+    0%,100%{
+        transform:scaleY(.35);
+        transform-origin:top;
+    }
+
+    50%{
+        transform:scaleY(1);
+        transform-origin:top;
+    }
+}
+
+/* =========================================================
+   STATEMENT
+========================================================= */
+
+.statement{
+    min-height:85vh;
+
+    display:flex;
+
+    align-items:center;
+}
+
+.statement-content{
+    max-width:930px;
+}
+
+.statement-label{
+    margin-bottom:25px;
+
+    color:var(--pink-light);
+
+    font-size:10px;
+
+    letter-spacing:5px;
+}
+
+.statement h2{
+    font-size:clamp(38px,7vw,84px);
+
+    font-weight:400;
+
+    line-height:1.08;
+
+    letter-spacing:-4px;
+}
+
+.statement h2 span{
+    color:rgba(255,255,255,.3);
+}
+
+/* =========================================================
+   VIDEO CHAPTER
+========================================================= */
+
+.chapter{
+    min-height:100vh;
+
+    padding:120px 0 150px;
+}
+
+.chapter-number{
+    color:var(--pink-light);
+
+    font-size:10px;
+
+    letter-spacing:5px;
+
+    margin-bottom:17px;
+}
+
+.chapter-title{
+    font-size:clamp(34px,5vw,65px);
+
+    line-height:1.1;
+
+    font-weight:400;
+
+    letter-spacing:-2px;
+
+    margin-bottom:45px;
+}
+
+.video-frame{
+    position:relative;
+
+    width:100%;
+
+    height:min(72vh,720px);
+
+    overflow:hidden;
+
+    background:#111;
+}
+
+.video-frame video{
+    display:block;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+.video-frame::after{
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    pointer-events:none;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0,0,0,.6),
+            transparent 48%
+        );
+}
+
+.video-info{
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:space-between;
+
+    gap:40px;
+
+    margin-top:30px;
+}
+
+.video-description{
+    max-width:650px;
+}
+
+.video-description p{
+    color:var(--muted);
+
+    font-size:15px;
+
+    line-height:1.9;
+}
+
+.chapter-btn{
+    flex-shrink:0;
+
+    border:1px solid rgba(255,255,255,.24);
+
+    border-radius:100px;
+
+    background:transparent;
+
+    color:#fff;
+
+    padding:13px 23px;
+
+    cursor:pointer;
+
+    transition:
+        background .35s ease,
+        color .35s ease,
+        transform .35s ease;
+}
+
+.chapter-btn:hover{
+    background:#fff;
+
+    color:#111;
+
+    transform:translateY(-3px);
+}
+
+/* =========================================================
+   STORY PANEL
+========================================================= */
+
+.story-panel{
+    display:none;
+
+    margin-top:28px;
+
+    padding:35px;
+
+    border:1px solid var(--line);
+
+    background:#0d0a10;
+
+    animation:
+        panelIn .8s cubic-bezier(.16,1,.3,1) both;
+}
+
+.story-panel.active{
+    display:block;
+}
+
+.story-panel h3{
+    margin-bottom:15px;
+
+    font-size:27px;
+
+    font-weight:400;
+}
+
+.story-panel p{
+    max-width:760px;
+
+    color:var(--muted);
+
+    font-size:15px;
+
+    line-height:1.9;
+}
+
+@keyframes panelIn{
+
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* =========================================================
+   LETTER
+========================================================= */
+
+.letter{
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255,77,145,.11),
+            transparent 38%
+        );
+}
+
+.letter-box{
+    width:min(760px,90%);
+}
+
+.letter-label{
+    margin-bottom:30px;
+
+    color:var(--pink-light);
+
+    font-size:10px;
+
+    letter-spacing:5px;
+}
+
+.letter-box h2{
+    margin-bottom:36px;
+
+    font-size:clamp(38px,6vw,70px);
+
+    line-height:1.1;
+
+    font-weight:400;
+
+    letter-spacing:-3px;
+}
+
+.letter-box p{
+    color:rgba(255,255,255,.62);
+
+    font-size:15px;
+
+    line-height:2;
+}
+
+.highlight{
+    color:#fff;
+}
+
+.signature{
+    margin-top:42px;
+
+    color:var(--pink-light);
+
+    font-size:18px;
+}
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+.final{
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255,82,150,.12),
+            transparent 40%
+        );
+}
+
+.final-content{
+    max-width:850px;
+}
+
+.final-small{
+    margin-bottom:25px;
+
+    color:rgba(255,255,255,.36);
+
+    font-size:10px;
+
+    letter-spacing:5px;
+}
+
+.final h2{
+    font-size:clamp(55px,12vw,140px);
+
+    line-height:.9;
+
+    font-weight:400;
+
+    letter-spacing:-7px;
+}
+
+.final h2 span{
+    color:var(--pink-light);
+}
+
+.final p{
+    max-width:550px;
+
+    margin:35px auto 0;
+
+    color:var(--muted);
+
+    line-height:1.9;
+}
+
+.restart{
+    margin-top:38px;
+
+    border:1px solid rgba(255,255,255,.25);
+
+    border-radius:100px;
+
+    background:transparent;
+
+    color:#fff;
+
+    padding:13px 24px;
+
+    cursor:pointer;
+
+    transition:
+        background .3s ease,
+        color .3s ease;
+}
+
+.restart:hover{
+    background:#fff;
+    color:#111;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    padding:35px 20px;
+
+    text-align:center;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+    color:rgba(255,255,255,.35);
+
+    font-size:10px;
+
+    letter-spacing:.5px;
+}
+
+.footer-logo{
+    display:block;
+
+    width:32px;
+    height:32px;
+
+    object-fit:contain;
+
+    margin:0 auto 10px;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:700px){
+
+    .music-control{
+        top:15px;
+        right:15px;
+
+        width:43px;
+        height:43px;
+    }
+
+    .opening-title{
+        letter-spacing:-3px;
+    }
+
+    .opening-subtitle{
+        font-size:12px;
+
+        letter-spacing:2px;
+    }
+
+    .hero h1{
+        letter-spacing:-5px;
+    }
+
+    .hero-text{
+        font-size:14px;
+    }
+
+    .statement h2{
+        letter-spacing:-2px;
+    }
+
+    .chapter{
+        padding:90px 0 110px;
+    }
+
+    .chapter-title{
+        letter-spacing:-1px;
+    }
+
+    .video-frame{
+        height:65vh;
+    }
+
+    .video-info{
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:25px;
+    }
+
+    .story-panel{
+        padding:25px;
+    }
+
+    .letter-box h2{
+        letter-spacing:-2px;
+    }
+
+    .letter-box p{
+        font-size:14px;
+    }
+
+    .final h2{
+        letter-spacing:-4px;
+    }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        scroll-behavior:auto !important;
+        transition-duration:.01ms !important;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+
+<!-- =======================================================
+     OPENING
+======================================================= -->
+
+<div id="opening">
+
+    <!--
+        პირველი 3-წამიანი ვიდეო.
+
+        თავიდან მხოლოდ ეს ვიდეო ჩანს.
+        ტექსტი საერთოდ დამალულია.
+    -->
+
+    <video
+        id="openingVideo"
+        class="opening-video"
+        src="video1.mp4"
+        muted
+        playsinline
+        preload="auto">
+    </video>
+
+    <div class="opening-video-overlay"></div>
+
+
+    <!--
+        ეს კონტენტი ჩნდება მხოლოდ ვიდეოს დასრულების შემდეგ.
+    -->
+
+    <div
+        class="cinematic-message"
+        id="cinematicMessage">
+
+        <div class="opening-kicker">
+            SOME STORIES ARE DIFFERENT
+        </div>
+
+        <h1 class="opening-title">
+            ყველაფერი<br>
+            <span>ჩვენით იწყება.</span>
+        </h1>
+
+        <div class="opening-subtitle">
+            დემე × ნინი
+        </div>
+
+        <button
+            class="open-btn"
+            id="openBtn">
+            ჩვენი ისტორია →
+        </button>
+
+    </div>
+
+
+    <div class="opening-status">
+        OUR STORY
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     MUSIC
+======================================================= -->
+
+<audio
+    id="music"
+    src="music.mp3"
+    loop
+    preload="auto">
+</audio>
+
+
+<button
+    class="music-control paused"
+    id="musicBtn"
+    aria-label="მუსიკის ჩართვა">
+
+    <div class="music-bars">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+</button>
+
+
+<!-- =======================================================
+     HERO
+======================================================= -->
+
+<section class="hero">
+
+    <div class="hero-content reveal">
+
+        <div class="eyebrow">
+            DEME × NINI
+        </div>
+
+        <h1>
+            ჩვენი<br>
+            <span>ისტორია.</span>
+        </h1>
+
+        <p class="hero-text">
+            ეს უბრალოდ საიტი არ არის.
+            ეს არის პატარა ადგილი,
+            სადაც ჩვენი მოგონებები,
+            სიტყვები და ის გრძნობაა,
+            რომელსაც სიტყვებით ბოლომდე ვერ ავხსნით.
+        </p>
+
+    </div>
+
+    <div class="scroll-indicator">
+        SCROLL
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     STATEMENT
+======================================================= -->
+
+<section class="statement">
+
+    <div class="container">
+
+        <div class="statement-content reveal">
+
+            <div class="statement-label">
+                01 — THE BEGINNING
+            </div>
+
+            <h2>
+                ზოგჯერ ერთი ადამიანი
+                უბრალოდ მოდის შენს ცხოვრებაში...
+                <span>
+                    და ყველაფერი იცვლება.
+                </span>
+            </h2>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CHAPTER 01
+======================================================= -->
+
+<section class="chapter">
+
+    <div class="container">
+
+        <div class="chapter-number reveal">
+            01 / 03
+        </div>
+
+        <h2 class="chapter-title reveal">
+            ყველაფერი აქედან იწყება.
+        </h2>
+
+        <div class="video-frame reveal">
+
+            <video
+                src="video1.mp4"
+                muted
+                playsinline
+                loop
+                autoplay>
+            </video>
+
+        </div>
+
+        <div class="video-info reveal">
+
+            <div class="video-description">
+
+                <p>
+                    შეიძლება იმ მომენტში ვერ მივხვდით,
+                    რამდენად მნიშვნელოვანი გახდებოდა
+                    ეს პატარა კადრი.
+                </p>
+
+            </div>
+
+            <button
+                class="chapter-btn"
+                data-target="story1"
+                data-default="გახსენი →">
+                გახსენი →
+            </button>
+
+        </div>
+
+
+        <div
+            class="story-panel"
+            id="story1">
+
+            <h3>
+                ჩვენი პირველი კადრი.
+            </h3>
+
+            <p>
+                დემე და ნინი.
+                ორი ადამიანი, ორი განსხვავებული ისტორია
+                და ერთი მომენტი, რომელმაც თავისი გაგრძელება
+                თვითონ დაწერა.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CHAPTER 02
+======================================================= -->
+
+<section class="chapter">
+
+    <div class="container">
+
+        <div class="chapter-number reveal">
+            02 / 03
+        </div>
+
+        <h2 class="chapter-title reveal">
+            შემდეგ მოგონებები დაგროვდა.
+        </h2>
+
+        <div class="video-frame reveal">
+
+            <video
+                src="video2.mp4"
+                muted
+                playsinline
+                loop>
+            </video>
+
+        </div>
+
+        <div class="video-info reveal">
+
+            <div class="video-description">
+
+                <p>
+                    ზოგი მოგონება ფოტოებში რჩება.
+                    ზოგი ვიდეოში.
+                    ზოგი კი უბრალოდ გულში.
+                </p>
+
+            </div>
+
+            <button
+                class="chapter-btn"
+                data-target="story2"
+                data-default="გაიხსენე →">
+                გაიხსენე →
+            </button>
+
+        </div>
+
+
+        <div
+            class="story-panel"
+            id="story2">
+
+            <h3>
+                ყველაზე ლამაზი ნაწილი.
+            </h3>
+
+            <p>
+                ის პატარა დეტალები, რომლებიც სხვებისთვის
+                შეიძლება ჩვეულებრივი იყოს,
+                ჩვენთვის ყველაზე ძვირფას მოგონებებად იქცა.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CHAPTER 03
+======================================================= -->
+
+<section class="chapter">
+
+    <div class="container">
+
+        <div class="chapter-number reveal">
+            03 / 03
+        </div>
+
+        <h2 class="chapter-title reveal">
+            მაგრამ ისტორია აქ არ მთავრდება.
+        </h2>
+
+        <div class="video-frame reveal">
+
+            <video
+                src="video3.mp4"
+                muted
+                playsinline
+                loop>
+            </video>
+
+        </div>
+
+        <div class="video-info reveal">
+
+            <div class="video-description">
+
+                <p>
+                    სამი პატარა კადრი.
+                    ერთი დიდი ისტორია.
+                    და კიდევ უამრავი რამ,
+                    რაც წინ გველოდება.
+                </p>
+
+            </div>
+
+            <button
+                class="chapter-btn"
+                data-target="story3"
+                data-default="გააგრძელე →">
+                გააგრძელე →
+            </button>
+
+        </div>
+
+
+        <div
+            class="story-panel"
+            id="story3">
+
+            <h3>
+                ეს მხოლოდ დასაწყისია.
+            </h3>
+
+            <p>
+                ყველაზე კარგი ის არის,
+                რომ ჩვენი ისტორიის შემდეგი ნაწილი
+                ჯერ არ დაწერილა.
+                მას ერთად დავწერთ.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     LETTER
+======================================================= -->
+
+<section class="letter">
+
+    <div class="letter-box reveal">
+
+        <div class="letter-label">
+            A LETTER FOR NINI
+        </div>
+
+        <h2>
+            ნინი,
+            შენ ხარ ჩემი
+            ყველაზე საყვარელი ისტორია.
+        </h2>
+
+        <p>
+
+            შეიძლება ეს საიტი უბრალოდ ეკრანზე
+            გამოჩენილი რამდენიმე სცენა იყოს,
+            მაგრამ მის უკან ერთი ძალიან მარტივი
+            აზრი დგას.
+
+            <br><br>
+
+            <span class="highlight">
+                მიხარია, რომ ჩემი ცხოვრების ამ ნაწილში შენ ხარ.
+            </span>
+
+            <br><br>
+
+            მინდა კიდევ ბევრი დღე,
+            ბევრი სიცილი,
+            ბევრი მოგონება
+            და ბევრი პატარა მომენტი დაგვიგროვდეს.
+
+            <br><br>
+
+            და როცა ოდესმე ამ გვერდს თავიდან გახსნი,
+            მინდა გახსოვდეს ერთი რამ:
+
+            <br><br>
+
+            <span class="highlight">
+                ეს ისტორია ჯერ არ დასრულებულა.
+            </span>
+
+        </p>
+
+        <div class="signature">
+            — დემე
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     FINAL
+======================================================= -->
+
+<section class="final">
+
+    <div class="final-content reveal">
+
+        <div class="final-small">
+            THE END?
+        </div>
+
+        <h2>
+            არა.<br>
+            <span>დასაწყისი.</span>
+        </h2>
+
+        <p>
+            იმიტომ, რომ ყველაზე ლამაზი კადრები
+            ჯერ კიდევ გადასაღებია.
+        </p>
+
+        <button
+            class="restart"
+            id="restart">
+            თავიდან ნახვა ↻
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     FOOTER
+======================================================= -->
+
+<footer>
+
+    <img
+        src="logo.png"
+        class="footer-logo"
+        alt="DENI">
+
+    <div>
+        შექმნილია დენის მიერ
+    </div>
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const opening =
+    document.getElementById("opening");
+
+const openingVideo =
+    document.getElementById("openingVideo");
+
+const cinematicMessage =
+    document.getElementById("cinematicMessage");
+
+const openBtn =
+    document.getElementById("openBtn");
+
+const music =
+    document.getElementById("music");
+
+const musicBtn =
+    document.getElementById("musicBtn");
+
+const restart =
+    document.getElementById("restart");
+
+
+/* =========================================================
+   OPENING VIDEO
+========================================================= */
+
+/*
+   ვიდეო იწყება ავტომატურად,
+   მაგრამ MUTED რეჟიმში.
+   ეს საჭიროა იმისთვის, რომ ბრაუზერმა autoplay
+   ჩვეულებრივ დაუშვას.
+*/
+
+function startOpeningVideo(){
+
+    openingVideo.currentTime = 0;
+
+    const playPromise =
+        openingVideo.play();
+
+    if(playPromise !== undefined){
+
+        playPromise.catch(() => {
+
+            /*
+               თუ ბრაუზერმა autoplay დაბლოკა,
+               ვიდეოს მაინც ვტოვებთ ეკრანზე.
+            */
+
+        });
+
+    }
+
+}
+
+startOpeningVideo();
+
+
+/* =========================================================
+   VIDEO ENDED
+========================================================= */
+
+/*
+   ყველაზე მნიშვნელოვანი ნაწილი:
+
+   სანამ ვიდეო არ დასრულდება,
+   cinematicMessage დამალულია.
+
+   ვიდეოს დასრულების მომენტში
+   ვამატებთ .finished და .show კლასებს.
+*/
+
+openingVideo.addEventListener("ended", () => {
+
+    opening.classList.add("finished");
+
+    cinematicMessage.classList.add("show");
+
+});
+
+
+/*
+   დამატებითი დაცვა:
+
+   თუ ვიდეო ზუსტად 3 წამზე არ დასრულდა,
+   მაინც მისი რეალური ended event განსაზღვრავს
+   ტექსტის გამოჩენის მომენტს.
+*/
+
+
+/* =========================================================
+   OPEN BUTTON
+========================================================= */
+
+openBtn.addEventListener("click", async () => {
+
+    /*
+       მომხმარებლის მოქმედების მომენტში
+       ვიწყებთ მუსიკას.
+    */
+
+    try{
+
+        await music.play();
+
+        musicBtn.classList.remove("paused");
+
+    }catch(error){
+
+        console.log(
+            "Music could not start automatically.",
+            error
+        );
+
+    }
+
+
+    /*
+       Opening ნელა ქრება.
+    */
+
+    opening.classList.add("hide");
+
+    /*
+       რამდენიმე წამში scrolling ნებადართული ხდება.
+    */
+
+    setTimeout(() => {
+
+        document.body.style.overflowY = "auto";
+
+    },700);
+
+});
+
+
+/* =========================================================
+   MUSIC BUTTON
+========================================================= */
+
+musicBtn.addEventListener("click", async () => {
+
+    if(music.paused){
+
+        try{
+
+            await music.play();
+
+            musicBtn.classList.remove("paused");
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+    }else{
+
+        music.pause();
+
+        musicBtn.classList.add("paused");
+
+    }
+
+});
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+const revealElements =
+    document.querySelectorAll(".reveal");
+
+const revealObserver =
+    new IntersectionObserver(
+
+        entries => {
+
+            entries.forEach(entry => {
+
+                if(entry.isIntersecting){
+
+                    entry.target.classList.add("show");
+
+                }
+
+            });
+
+        },
+
+        {
+            threshold:.12
+        }
+
+    );
+
+
+revealElements.forEach(element => {
+
+    revealObserver.observe(element);
+
+});
+
+
+/* =========================================================
+   CHAPTER BUTTONS
+========================================================= */
+
+const chapterButtons =
+    document.querySelectorAll(".chapter-btn");
+
+chapterButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const targetId =
+            button.dataset.target;
+
+        const panel =
+            document.getElementById(targetId);
+
+        if(!panel){
+            return;
+        }
+
+        const isOpen =
+            panel.classList.contains("active");
+
+
+        if(isOpen){
+
+            /*
+               დახურვა
+            */
+
+            panel.classList.remove("active");
+
+            button.textContent =
+                button.dataset.default;
+
+        }else{
+
+            /*
+               გახსნა
+            */
+
+            panel.classList.add("active");
+
+            button.textContent =
+                "დახურვა ↑";
+
+
+            /*
+               პანელთან ნელა ჩასვლა.
+            */
+
+            setTimeout(() => {
+
+                panel.scrollIntoView({
+                    behavior:"smooth",
+                    block:"center"
+                });
+
+            },100);
+
+        }
+
+    });
+
+});
+
+
+/* =========================================================
+   CHAPTER VIDEO PLAY / PAUSE
+========================================================= */
+
+const chapterVideos =
+    document.querySelectorAll(".video-frame video");
+
+const videoObserver =
+    new IntersectionObserver(
+
+        entries => {
+
+            entries.forEach(entry => {
+
+                const video =
+                    entry.target;
+
+                if(entry.isIntersecting){
+
+                    video.play().catch(() => {});
+
+                }else{
+
+                    video.pause();
+
+                }
+
+            });
+
+        },
+
+        {
+            threshold:.35
+        }
+
+    );
+
+
+chapterVideos.forEach(video => {
+
+    videoObserver.observe(video);
+
+});
+
+
+/* =========================================================
+   RESTART
+========================================================= */
+
+restart.addEventListener("click", () => {
+
+    /*
+       დაბრუნება ზემოთ.
+    */
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+
+    /*
+       Opening-ის დაბრუნება.
+    */
+
+    opening.classList.remove("hide");
+
+    opening.classList.remove("finished");
+
+    cinematicMessage.classList.remove("show");
+
+
+    /*
+       ისევ თავიდან ვიწყებთ ვიდეოს.
+    */
+
+    openingVideo.currentTime = 0;
+
+    openingVideo.play().catch(() => {});
+
+
+    /*
+       scrolling დროებით იბლოკება.
+    */
+
+    document.body.style.overflow = "hidden";
+
+});
+
+
+/* =========================================================
+   INITIAL STATE
+========================================================= */
+
+document.body.style.overflow = "hidden";
+
+
+/* =========================================================
+   VIDEO ERROR CHECK
+========================================================= */
+
+openingVideo.addEventListener("error", () => {
+
+    console.warn(
+        "video1.mp4 ვერ ჩაიტვირთა. შეამოწმე ფაილის სახელი და მდებარეობა."
+    );
+
+});
+
+
+music.addEventListener("error", () => {
+
+    console.warn(
+        "music.mp3 ვერ ჩაიტვირთა. შეამოწმე ფაილის სახელი და მდებარეობა."
+    );
+
+});
+
+</script>
+
+</body>
+</html>
+```
