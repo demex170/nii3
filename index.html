@@ -3,7 +3,7 @@
 <html lang="ka">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#08060a">
 <meta name="description" content="დემე × ნინი — ჩვენი ისტორია">
 <title>დემე × ნინი — ჩვენი ისტორია</title>
@@ -26,6 +26,7 @@
 
 html{
     scroll-behavior:smooth;
+    background:#08060a;
 }
 
 body{
@@ -34,6 +35,7 @@ body{
     color:#fff;
     font-family:"Noto Sans Georgian",sans-serif;
     overflow:hidden;
+    -webkit-font-smoothing:antialiased;
 }
 
 button{
@@ -57,18 +59,58 @@ button{
     position:fixed;
     inset:0;
     z-index:10000;
-    background:#000;
+
+    background:#08060a;
+
     overflow:hidden;
 
+    opacity:1;
+    visibility:visible;
+
     transition:
-        opacity 1.3s cubic-bezier(.16,1,.3,1),
-        visibility 1.3s;
+        opacity 1.2s cubic-bezier(.16,1,.3,1),
+        visibility 1.2s;
 }
 
 #opening.hide{
     opacity:0;
     visibility:hidden;
     pointer-events:none;
+}
+
+
+/* =========================================================
+   OPENING FALLBACK IMAGE
+   IMPORTANT FOR IPHONE / SAFARI
+========================================================= */
+
+.opening-fallback{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    background-image:
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,.18),
+            rgba(0,0,0,.62)
+        ),
+        url("hero.jpg");
+
+    background-size:cover;
+    background-position:center center;
+    background-repeat:no-repeat;
+
+    transform:scale(1.01);
+
+    z-index:0;
+
+    opacity:1;
+
+    transition:
+        opacity 1s ease;
 }
 
 
@@ -84,33 +126,64 @@ button{
     height:100%;
 
     object-fit:cover;
+
     display:block;
-    background:#000;
+
+    background:transparent;
+
+    z-index:1;
+
+    opacity:1;
+
+    transition:
+        opacity .8s ease;
 }
+
+
+/*
+   თუ ვიდეო ვერ ჩაიტვირთა ან autoplay დაიბლოკა,
+   JS ამ კლასს დაამატებს.
+*/
+
+#opening.video-failed .opening-video{
+    opacity:0;
+}
+
+#opening.video-failed .opening-fallback{
+    opacity:1;
+}
+
+
+/* =========================================================
+   OPENING OVERLAY
+========================================================= */
 
 .opening-video-overlay{
     position:absolute;
     inset:0;
 
+    z-index:2;
+
     background:
         linear-gradient(
             to bottom,
-            rgba(0,0,0,.04),
-            rgba(0,0,0,.18)
+            rgba(0,0,0,.12),
+            rgba(0,0,0,.34)
         );
 
     pointer-events:none;
 
     transition:
-        background 1.8s ease;
+        background 1.5s ease;
 }
 
-#opening.finished .opening-video-overlay{
+#opening.finished .opening-video-overlay,
+#opening.video-failed .opening-video-overlay{
     background:
         linear-gradient(
             to bottom,
             rgba(0,0,0,.22),
-            rgba(0,0,0,.58)
+            rgba(0,0,0,.64)
         );
 }
 
@@ -122,6 +195,7 @@ button{
 .cinematic-message{
     position:absolute;
     inset:0;
+
     z-index:5;
 
     display:flex;
@@ -130,27 +204,32 @@ button{
     align-items:center;
 
     text-align:center;
-    padding:30px;
+
+    padding:
+        30px
+        30px
+        calc(30px + env(safe-area-inset-bottom));
 
     opacity:0;
     visibility:hidden;
 
-    transform:translateY(35px);
+    transform:translateY(30px);
 
     transition:
-        opacity 1.5s cubic-bezier(.16,1,.3,1),
-        transform 1.5s cubic-bezier(.16,1,.3,1),
-        visibility 0s linear 1.5s;
+        opacity 1.3s cubic-bezier(.16,1,.3,1),
+        transform 1.3s cubic-bezier(.16,1,.3,1),
+        visibility 0s linear 1.3s;
 }
 
 .cinematic-message.show{
     opacity:1;
     visibility:visible;
+
     transform:translateY(0);
 
     transition:
-        opacity 1.5s cubic-bezier(.16,1,.3,1),
-        transform 1.5s cubic-bezier(.16,1,.3,1);
+        opacity 1.3s cubic-bezier(.16,1,.3,1),
+        transform 1.3s cubic-bezier(.16,1,.3,1);
 }
 
 
@@ -160,18 +239,20 @@ button{
 
 .opening-kicker{
     font-size:10px;
+
     letter-spacing:6px;
 
-    color:rgba(255,255,255,.72);
+    color:rgba(255,255,255,.76);
 
     margin-bottom:24px;
 
     opacity:0;
-    transform:translateY(20px);
+
+    transform:translateY(18px);
 
     transition:
-        opacity 1s ease .15s,
-        transform 1s ease .15s;
+        opacity 1s ease .1s,
+        transform 1s ease .1s;
 }
 
 .cinematic-message.show .opening-kicker{
@@ -183,20 +264,23 @@ button{
     font-size:clamp(42px,9vw,100px);
 
     line-height:1.02;
+
     font-weight:400;
+
     letter-spacing:-5px;
 
     color:#fff;
 
     text-shadow:
-        0 10px 50px rgba(0,0,0,.4);
+        0 10px 50px rgba(0,0,0,.65);
 
     opacity:0;
-    transform:translateY(30px);
+
+    transform:translateY(25px);
 
     transition:
-        opacity 1.35s cubic-bezier(.16,1,.3,1) .35s,
-        transform 1.35s cubic-bezier(.16,1,.3,1) .35s;
+        opacity 1.25s cubic-bezier(.16,1,.3,1) .3s,
+        transform 1.25s cubic-bezier(.16,1,.3,1) .3s;
 }
 
 .cinematic-message.show .opening-title{
@@ -211,17 +295,19 @@ button{
 .opening-subtitle{
     margin-top:23px;
 
-    color:rgba(255,255,255,.72);
+    color:rgba(255,255,255,.78);
 
     font-size:14px;
+
     letter-spacing:3px;
 
     opacity:0;
-    transform:translateY(20px);
+
+    transform:translateY(18px);
 
     transition:
-        opacity 1s ease .75s,
-        transform 1s ease .75s;
+        opacity 1s ease .65s,
+        transform 1s ease .65s;
 }
 
 .cinematic-message.show .opening-subtitle{
@@ -239,22 +325,27 @@ button{
 
     padding:14px 27px;
 
-    border:1px solid rgba(255,255,255,.4);
+    border:1px solid rgba(255,255,255,.45);
+
     border-radius:100px;
 
-    background:rgba(0,0,0,.16);
+    background:rgba(0,0,0,.28);
 
     color:#fff;
 
     cursor:pointer;
+
     font-size:13px;
 
+    -webkit-tap-highlight-color:transparent;
+
     opacity:0;
-    transform:translateY(20px);
+
+    transform:translateY(18px);
 
     transition:
-        opacity 1s ease 1.1s,
-        transform 1s ease 1.1s,
+        opacity 1s ease .95s,
+        transform 1s ease .95s,
         background .35s ease,
         color .35s ease,
         border-color .35s ease;
@@ -269,7 +360,10 @@ button{
     background:#fff;
     border-color:#fff;
     color:#111;
-    transform:translateY(-2px);
+}
+
+.open-btn:active{
+    transform:scale(.97);
 }
 
 
@@ -279,7 +373,10 @@ button{
 
 .opening-status{
     position:absolute;
-    bottom:25px;
+
+    bottom:
+        calc(25px + env(safe-area-inset-bottom));
+
     left:50%;
 
     transform:translateX(-50%);
@@ -287,16 +384,18 @@ button{
     z-index:10;
 
     font-size:9px;
+
     letter-spacing:4px;
 
-    color:rgba(255,255,255,.38);
+    color:rgba(255,255,255,.45);
 
     white-space:nowrap;
 
     transition:opacity .6s ease;
 }
 
-#opening.finished .opening-status{
+#opening.finished .opening-status,
+#opening.video-failed .opening-status{
     opacity:0;
 }
 
@@ -308,7 +407,9 @@ button{
 .music-control{
     position:fixed;
 
-    top:20px;
+    top:
+        calc(20px + env(safe-area-inset-top));
+
     right:20px;
 
     width:46px;
@@ -317,6 +418,7 @@ button{
     z-index:9000;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
@@ -330,6 +432,8 @@ button{
 
     cursor:pointer;
 
+    -webkit-tap-highlight-color:transparent;
+
     transition:
         transform .3s ease,
         border-color .3s ease;
@@ -337,15 +441,18 @@ button{
 
 .music-control:hover{
     transform:scale(1.06);
+
     border-color:rgba(255,255,255,.45);
 }
 
 .music-bars{
     display:flex;
+
     align-items:flex-end;
     justify-content:center;
 
     gap:3px;
+
     height:16px;
 }
 
@@ -410,11 +517,13 @@ section{
 
 .container{
     width:min(1120px,90%);
+
     margin:0 auto;
 }
 
 .reveal{
     opacity:0;
+
     transform:translateY(45px);
 
     transition:
@@ -424,21 +533,23 @@ section{
 
 .reveal.show{
     opacity:1;
+
     transform:translateY(0);
 }
 
 
 /* =========================================================
    HERO
-   HERO.JPG
 ========================================================= */
 
 .hero{
     position:relative;
 
     min-height:100vh;
+    min-height:100svh;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
@@ -456,6 +567,7 @@ section{
     content:"";
 
     position:absolute;
+
     inset:0;
 
     z-index:-3;
@@ -463,7 +575,9 @@ section{
     background-image:url("hero.jpg");
 
     background-size:cover;
+
     background-position:center center;
+
     background-repeat:no-repeat;
 
     transform:scale(1.015);
@@ -473,12 +587,13 @@ section{
 }
 
 
-/* DARK CINEMATIC OVERLAY */
+/* HERO OVERLAY */
 
 .hero::after{
     content:"";
 
     position:absolute;
+
     inset:0;
 
     z-index:-2;
@@ -499,8 +614,18 @@ section{
         );
 }
 
+.hero-content{
+    position:relative;
 
-/* SUBTLE PINK LIGHT */
+    z-index:2;
+
+    width:min(900px,92%);
+
+    padding-top:20px;
+
+    animation:
+        heroContentIn 1.3s cubic-bezier(.16,1,.3,1) .25s both;
+}
 
 .hero-content::before{
     content:"";
@@ -527,23 +652,11 @@ section{
     z-index:-1;
 }
 
-
-.hero-content{
-    position:relative;
-    z-index:2;
-
-    width:min(900px,92%);
-
-    padding-top:20px;
-
-    animation:
-        heroContentIn 1.3s cubic-bezier(.16,1,.3,1) .25s both;
-}
-
 .eyebrow{
     margin-bottom:28px;
 
     font-size:10px;
+
     letter-spacing:6px;
 
     color:rgba(255,255,255,.68);
@@ -556,7 +669,9 @@ section{
     font-size:clamp(60px,12vw,150px);
 
     line-height:.86;
+
     font-weight:400;
+
     letter-spacing:-8px;
 
     text-shadow:
@@ -575,14 +690,12 @@ section{
     color:rgba(255,255,255,.82);
 
     font-size:15px;
+
     line-height:2;
 
     text-shadow:
         0 3px 18px rgba(0,0,0,.8);
 }
-
-
-/* HERO IMAGE ANIMATION */
 
 @keyframes heroImage{
 
@@ -611,17 +724,24 @@ section{
 }
 
 
+/* =========================================================
+   SCROLL
+========================================================= */
+
 .scroll-indicator{
     position:absolute;
 
     left:50%;
-    bottom:28px;
+
+    bottom:
+        calc(28px + env(safe-area-inset-bottom));
 
     transform:translateX(-50%);
 
     color:rgba(255,255,255,.6);
 
     font-size:9px;
+
     letter-spacing:5px;
 
     text-align:center;
@@ -638,6 +758,7 @@ section{
     display:block;
 
     width:1px;
+
     height:48px;
 
     margin:13px auto 0;
@@ -671,6 +792,7 @@ section{
     min-height:85vh;
 
     display:flex;
+
     align-items:center;
 }
 
@@ -684,6 +806,7 @@ section{
     color:var(--pink-light);
 
     font-size:10px;
+
     letter-spacing:5px;
 }
 
@@ -691,6 +814,7 @@ section{
     font-size:clamp(38px,7vw,84px);
 
     font-weight:400;
+
     line-height:1.08;
 
     letter-spacing:-4px;
@@ -707,6 +831,7 @@ section{
 
 .chapter{
     min-height:100vh;
+
     padding:120px 0 150px;
 }
 
@@ -714,6 +839,7 @@ section{
     color:var(--pink-light);
 
     font-size:10px;
+
     letter-spacing:5px;
 
     margin-bottom:17px;
@@ -723,6 +849,7 @@ section{
     font-size:clamp(34px,5vw,65px);
 
     line-height:1.1;
+
     font-weight:400;
 
     letter-spacing:-2px;
@@ -741,12 +868,15 @@ section{
     width:100%;
 
     height:auto;
+
     min-height:0;
 
     overflow:hidden;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     background:#050407;
@@ -756,9 +886,11 @@ section{
     display:block;
 
     width:100%;
+
     height:auto;
 
     max-width:100%;
+
     max-height:80vh;
 
     object-fit:contain;
@@ -770,6 +902,7 @@ section{
     content:"";
 
     position:absolute;
+
     inset:0;
 
     pointer-events:none;
@@ -784,11 +917,13 @@ section{
 
 .full-video{
     background:#050407;
+
     padding:0;
 }
 
 .full-video video{
     width:100%;
+
     height:auto;
 
     max-height:80vh;
@@ -805,6 +940,7 @@ section{
     display:flex;
 
     align-items:flex-end;
+
     justify-content:space-between;
 
     gap:40px;
@@ -820,6 +956,7 @@ section{
     color:var(--muted);
 
     font-size:15px;
+
     line-height:1.9;
 }
 
@@ -846,7 +983,9 @@ section{
 
 .chapter-btn:hover{
     background:#fff;
+
     color:#111;
+
     transform:translateY(-3px);
 }
 
@@ -859,6 +998,7 @@ section{
     display:none;
 
     margin-top:28px;
+
     padding:35px;
 
     border:1px solid var(--line);
@@ -877,6 +1017,7 @@ section{
     margin-bottom:15px;
 
     font-size:27px;
+
     font-weight:400;
 }
 
@@ -886,6 +1027,7 @@ section{
     color:var(--muted);
 
     font-size:15px;
+
     line-height:1.9;
 }
 
@@ -912,7 +1054,9 @@ section{
     min-height:100vh;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     text-align:center;
@@ -935,6 +1079,7 @@ section{
     color:var(--pink-light);
 
     font-size:10px;
+
     letter-spacing:5px;
 }
 
@@ -944,6 +1089,7 @@ section{
     font-size:clamp(38px,6vw,70px);
 
     line-height:1.1;
+
     font-weight:400;
 
     letter-spacing:-3px;
@@ -953,6 +1099,7 @@ section{
     color:rgba(255,255,255,.62);
 
     font-size:15px;
+
     line-height:2;
 }
 
@@ -977,7 +1124,9 @@ section{
     min-height:100vh;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     text-align:center;
@@ -1000,6 +1149,7 @@ section{
     color:rgba(255,255,255,.36);
 
     font-size:10px;
+
     letter-spacing:5px;
 }
 
@@ -1007,6 +1157,7 @@ section{
     font-size:clamp(55px,12vw,140px);
 
     line-height:.9;
+
     font-weight:400;
 
     letter-spacing:-7px;
@@ -1048,6 +1199,7 @@ section{
 
 .restart:hover{
     background:#fff;
+
     color:#111;
 }
 
@@ -1057,7 +1209,10 @@ section{
 ========================================================= */
 
 footer{
-    padding:35px 20px;
+    padding:
+        35px
+        20px
+        calc(35px + env(safe-area-inset-bottom));
 
     text-align:center;
 
@@ -1089,7 +1244,9 @@ footer{
 @media(max-width:700px){
 
     .music-control{
-        top:15px;
+        top:
+            calc(15px + env(safe-area-inset-top));
+
         right:15px;
 
         width:43px;
@@ -1105,14 +1262,13 @@ footer{
         letter-spacing:2px;
     }
 
-    /* HERO MOBILE */
-
     .hero{
         min-height:100svh;
     }
 
     .hero::before{
         background-position:center center;
+
         transform:scale(1.025);
     }
 
@@ -1122,7 +1278,6 @@ footer{
 
     .hero-text{
         font-size:14px;
-        line-height:1.9;
     }
 
     .eyebrow{
@@ -1144,10 +1299,13 @@ footer{
 
     .video-frame{
         width:100%;
+
         height:auto;
+
         min-height:0;
 
         display:flex;
+
         align-items:center;
         justify-content:center;
 
@@ -1156,9 +1314,11 @@ footer{
 
     .video-frame video{
         width:100%;
+
         height:auto;
 
         max-width:100%;
+
         max-height:75vh;
 
         object-fit:contain;
@@ -1166,12 +1326,15 @@ footer{
 
     .full-video{
         width:100%;
+
         height:auto;
+
         min-height:0;
     }
 
     .full-video video{
         width:100%;
+
         height:auto;
 
         max-height:75vh;
@@ -1181,6 +1344,7 @@ footer{
 
     .video-info{
         flex-direction:column;
+
         align-items:flex-start;
 
         gap:25px;
@@ -1206,6 +1370,33 @@ footer{
 
 
 /* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media(max-width:390px){
+
+    .opening-kicker{
+        font-size:8px;
+        letter-spacing:4px;
+    }
+
+    .opening-title{
+        font-size:42px;
+    }
+
+    .opening-subtitle{
+        font-size:11px;
+    }
+
+    .open-btn{
+        padding:13px 22px;
+        font-size:12px;
+    }
+
+}
+
+
+/* =========================================================
    REDUCED MOTION
 ========================================================= */
 
@@ -1216,6 +1407,7 @@ footer{
     *::after{
 
         animation-duration:.01ms !important;
+
         animation-iteration-count:1 !important;
 
         scroll-behavior:auto !important;
@@ -1237,17 +1429,38 @@ footer{
 
 <div id="opening">
 
- 
+```
+<!--
+    ეს ფოტო არის მთავარი FALLBACK.
+
+    თუ iPhone-ზე ვიდეო არ გაეშვა,
+    მომხმარებელი მაინც დაინახავს hero.jpg-ს.
+-->
+
+<div
+    class="opening-fallback"
+    aria-hidden="true">
+</div>
+
+
+<!--
+    playsinline + muted + preload
+    Safari-სთვის აუცილებელი/მნიშვნელოვანი პარამეტრებია.
+-->
+
 <video
     id="openingVideo"
     class="opening-video"
     src="video1.mp4"
     muted
     playsinline
-    preload="auto">
+    webkit-playsinline
+    preload="metadata">
 </video>
 
+
 <div class="opening-video-overlay"></div>
+
 
 <div
     class="cinematic-message"
@@ -1276,10 +1489,11 @@ footer{
 
 </div>
 
+
 <div class="opening-status">
     OUR STORY
 </div>
- 
+```
 
 </div>
 
@@ -1298,7 +1512,7 @@ footer{
  id="musicBtn"
  aria-label="მუსიკის ჩართვა">
 
- 
+```
 <div class="music-bars">
 
     <span></span>
@@ -1307,7 +1521,7 @@ footer{
     <span></span>
 
 </div>
- 
+```
 
 </button>
 
@@ -1317,7 +1531,7 @@ footer{
 
 <section class="hero">
 
- 
+```
 <div class="hero-content reveal">
 
     <div class="eyebrow">
@@ -1342,7 +1556,7 @@ footer{
 <div class="scroll-indicator">
     SCROLL
 </div>
- 
+```
 
 </section>
 
@@ -1352,7 +1566,7 @@ footer{
 
 <section class="statement">
 
- 
+```
 <div class="container">
 
     <div class="statement-content reveal">
@@ -1372,7 +1586,7 @@ footer{
     </div>
 
 </div>
- 
+```
 
 </section>
 
@@ -1382,7 +1596,7 @@ footer{
 
 <section class="chapter">
 
- 
+```
 <div class="container">
 
     <div class="chapter-number reveal">
@@ -1399,8 +1613,9 @@ footer{
             src="video1.mp4"
             muted
             playsinline
+            webkit-playsinline
             loop
-            autoplay>
+            preload="metadata">
         </video>
 
     </div>
@@ -1446,7 +1661,7 @@ footer{
     </div>
 
 </div>
- 
+```
 
 </section>
 
@@ -1456,7 +1671,7 @@ footer{
 
 <section class="chapter">
 
- 
+```
 <div class="container">
 
     <div class="chapter-number reveal">
@@ -1473,7 +1688,9 @@ footer{
             src="video2.mp4"
             muted
             playsinline
-            loop>
+            webkit-playsinline
+            loop
+            preload="metadata">
         </video>
 
     </div>
@@ -1518,7 +1735,7 @@ footer{
     </div>
 
 </div>
- 
+```
 
 </section>
 
@@ -1528,7 +1745,7 @@ footer{
 
 <section class="chapter">
 
- 
+```
 <div class="container">
 
     <div class="chapter-number reveal">
@@ -1545,7 +1762,9 @@ footer{
             src="video3.mp4"
             muted
             playsinline
-            loop>
+            webkit-playsinline
+            loop
+            preload="metadata">
         </video>
 
     </div>
@@ -1592,7 +1811,7 @@ footer{
     </div>
 
 </div>
- 
+```
 
 </section>
 
@@ -1602,7 +1821,7 @@ footer{
 
 <section class="letter">
 
- 
+```
 <div class="letter-box reveal">
 
     <div class="letter-label">
@@ -1653,7 +1872,7 @@ footer{
     </div>
 
 </div>
-
+```
 
 </section>
 
@@ -1663,7 +1882,7 @@ footer{
 
 <section class="final">
 
-
+```
 <div class="final-content reveal">
 
     <div class="final-small">
@@ -1689,7 +1908,7 @@ footer{
     </button>
 
 </div>
- 
+```
 
 </section>
 
@@ -1699,7 +1918,7 @@ footer{
 
 <footer>
 
-
+```
 <img
     src="logo.png"
     class="footer-logo"
@@ -1708,7 +1927,7 @@ footer{
 <div>
     შექმნილია დენის მიერ
 </div>
-
+```
 
 </footer>
 
@@ -1741,25 +1960,156 @@ const restart =
 
 
 /* =========================================================
-   OPENING VIDEO
+   OPENING STATE
+========================================================= */
+
+let openingFinished = false;
+let fallbackTimer = null;
+
+
+/* =========================================================
+   SHOW OPENING MESSAGE
+========================================================= */
+
+function showOpeningMessage(){
+
+    if(openingFinished){
+        return;
+    }
+
+    openingFinished = true;
+
+    opening.classList.add("finished");
+
+    cinematicMessage.classList.add("show");
+
+}
+
+
+/* =========================================================
+   VIDEO ENDED
+========================================================= */
+
+openingVideo.addEventListener("ended", () => {
+
+    clearTimeout(fallbackTimer);
+
+    showOpeningMessage();
+
+});
+
+
+/* =========================================================
+   VIDEO ERROR
+========================================================= */
+
+openingVideo.addEventListener("error", () => {
+
+    console.warn(
+        "Opening video ვერ ჩაიტვირთა."
+    );
+
+    /*
+       ვიდეო ვერ გაეშვა.
+
+       ამის ნაცვლად:
+       hero.jpg გამოჩნდება.
+    */
+
+    opening.classList.add("video-failed");
+
+    showOpeningMessage();
+
+});
+
+
+/* =========================================================
+   VIDEO CAN PLAY
+========================================================= */
+
+openingVideo.addEventListener("canplay", () => {
+
+    opening.classList.remove("video-failed");
+
+});
+
+
+/* =========================================================
+   START OPENING
 ========================================================= */
 
 function startOpeningVideo(){
 
+    /*
+       თავიდან ვტოვებთ hero.jpg-ს ქვემოთ.
+
+       ამიტომ სანამ ვიდეო ჩაიტვირთება,
+       მომხმარებელი შავ ეკრანს აღარ მიიღებს.
+    */
+
+    opening.classList.remove("video-failed");
+
     openingVideo.currentTime = 0;
+
+    /*
+       თუ Safari-მ autoplay დაბლოკა,
+       მაქსიმუმ რამდენიმე წამში fallback-ზე გადავდივართ.
+    */
+
+    fallbackTimer = setTimeout(() => {
+
+        if(
+            !openingVideo ||
+            openingVideo.paused
+        ){
+
+            console.warn(
+                "Video autoplay blocked. Using hero.jpg fallback."
+            );
+
+            opening.classList.add("video-failed");
+
+            showOpeningMessage();
+
+        }
+
+    },3500);
+
+
+    /*
+       ვცდით autoplay-ს.
+    */
 
     const playPromise =
         openingVideo.play();
 
     if(playPromise !== undefined){
 
-        playPromise.catch(() => {
+        playPromise
+            .then(() => {
 
-            console.log(
-                "Opening video autoplay was blocked."
-            );
+                clearTimeout(fallbackTimer);
 
-        });
+            })
+            .catch(() => {
+
+                /*
+                   iPhone/Safari-ზე ეს სრულიად შესაძლებელია.
+
+                   საიტი არ უნდა გაჩერდეს.
+                */
+
+                console.warn(
+                    "Video autoplay blocked. Falling back to hero.jpg."
+                );
+
+                clearTimeout(fallbackTimer);
+
+                opening.classList.add("video-failed");
+
+                showOpeningMessage();
+
+            });
 
     }
 
@@ -1769,23 +2119,17 @@ startOpeningVideo();
 
 
 /* =========================================================
-   OPENING VIDEO ENDED
-========================================================= */
-
-openingVideo.addEventListener("ended", () => {
-
-    opening.classList.add("finished");
-
-    cinematicMessage.classList.add("show");
-
-});
-
-
-/* =========================================================
    OPEN BUTTON
 ========================================================= */
 
 openBtn.addEventListener("click", async () => {
+
+    /*
+       ახლა უკვე მომხმარებლის gesture გვაქვს.
+
+       ამიტომ მუსიკის autoplay ყველაზე საიმედოდ
+       სწორედ აქ ვიწყებთ.
+    */
 
     try{
 
@@ -1795,14 +2139,24 @@ openBtn.addEventListener("click", async () => {
 
     }catch(error){
 
-        console.log(
-            "Music could not start.",
+        console.warn(
+            "Music could not start:",
             error
         );
 
     }
 
+
+    /*
+       Opening ქრება.
+    */
+
     opening.classList.add("hide");
+
+
+    /*
+       Scroll ჩართულია.
+    */
 
     setTimeout(() => {
 
@@ -1829,7 +2183,7 @@ musicBtn.addEventListener("click", async () => {
 
         }catch(error){
 
-            console.log(error);
+            console.warn(error);
 
         }
 
@@ -1905,6 +2259,7 @@ chapterButtons.forEach(button => {
 
         const isOpen =
             panel.classList.contains("active");
+
 
         if(isOpen){
 
@@ -1992,15 +2347,33 @@ restart.addEventListener("click", () => {
         behavior:"smooth"
     });
 
+
+    openingFinished = false;
+
+
+    clearTimeout(fallbackTimer);
+
+
     opening.classList.remove("hide");
 
     opening.classList.remove("finished");
 
+    opening.classList.remove("video-failed");
+
     cinematicMessage.classList.remove("show");
+
 
     openingVideo.currentTime = 0;
 
-    openingVideo.play().catch(() => {});
+
+    /*
+       ისევ ვცდით ვიდეოს.
+       თუ iPhone დაბლოკავს,
+       ისევ hero.jpg fallback იმუშავებს.
+    */
+
+    startOpeningVideo();
+
 
     document.body.style.overflow = "hidden";
 
@@ -2015,16 +2388,32 @@ document.body.style.overflow = "hidden";
 
 
 /* =========================================================
-   ERROR CHECKING
+   IMAGE CHECK
 ========================================================= */
 
-openingVideo.addEventListener("error", () => {
+const fallbackImage =
+    new Image();
 
-    console.warn(
-        "video1.mp4 ვერ ჩაიტვირთა. შეამოწმე ფაილის სახელი."
+fallbackImage.onload = () => {
+
+    console.log(
+        "hero.jpg loaded successfully."
     );
 
-});
+};
+
+fallbackImage.onerror = () => {
+
+    console.warn(
+        "hero.jpg ვერ ჩაიტვირთა. შეამოწმე ფაილის სახელი და მდებარეობა."
+    );
+
+};
+
+
+/* =========================================================
+   MUSIC ERROR
+========================================================= */
 
 music.addEventListener("error", () => {
 
@@ -2036,7 +2425,7 @@ music.addEventListener("error", () => {
 
 
 /* =========================================================
-   OPTIONAL VIDEO ERROR CHECK
+   VIDEO ERROR CHECK
 ========================================================= */
 
 chapterVideos.forEach((video, index) => {
@@ -2044,7 +2433,7 @@ chapterVideos.forEach((video, index) => {
     video.addEventListener("error", () => {
 
         console.warn(
-            "ვიდეო ${index + 1} ვერ ჩაიტვირთა."
+            `ვიდეო ${index + 1} ვერ ჩაიტვირთა.`
         );
 
     });
